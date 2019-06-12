@@ -1,0 +1,10 @@
+{
+  "name": "litterhelper-modiancrowdfunding",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "clipboardy": "^2.0.0",
+    "superagent": "^5.0.7"
+  }
+}
