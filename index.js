@@ -1,5 +1,5 @@
-const Modian_URL = 'https://zhongchou.modian.com/realtime/get_simple_product?ids=61433&jsonpcallback='
-const storage_key_name = 'modian_saved_data_61433'
+const default__project_id = 61433
+let storage_key_name = 'modian_saved_data_61433'
 
 const storage = {
   save (new_date) {
@@ -142,7 +142,7 @@ function renderToTable (data) {
 }
 
 function init () {
-  return makeRequest('GET', Modian_URL).then(text => {
+  return makeRequest('GET', getProjectAPI()).then(text => {
     const
       text_json = text.slice(32, text.length - 3),
       data = JSON.parse(text_json)
@@ -162,8 +162,14 @@ function init () {
         nextStep = (Math.floor(backer_money_rew / 100000) + 1) * 10,
         nextLack = nextStep * 10000 - backer_money_rew
 
-      const
+      let result
+
+      if (+data.id === default__project_id) {
         result = `大家好，我是本群的“提醒众筹小助手”，到目前为止已经有 ${backer_count} 人参与筹得了 ${backer_money_rew} 元，离下个解锁目标 ${nextStep} 万元还差 ${nextLack} 元。希望看到此消息的人可以和我一起来低空飞行，让我们一起成为众筹小能手吧！`
+      } else {
+        result = `“${data['short_title']}” 项目到目前为止已筹得 ${backer_money_rew} 元，共 ${backer_count} 人参与。`
+        window.document.title = `“${data['short_title']}” 项目数据`
+      }
 
       document.querySelector('#littleHelperText').value = result
 
@@ -186,6 +192,25 @@ function init () {
     console.log(err)
     return err
   })
+
+  function getProjectAPI () {
+    const
+      Modian_URL = 'https://zhongchou.modian.com/realtime/get_simple_product'
+
+    const
+      href = document.location.href,
+      query_str = href.substring(href.indexOf('?') + 1),
+      searchParams = new URLSearchParams(query_str),
+      project_id = searchParams.get('id') || default__project_id,
+      apiParams = new URLSearchParams()
+
+    storage_key_name = `modian_saved_data_${project_id}`
+
+    apiParams.set('ids', project_id)
+    apiParams.set('jsonpcallback', '')
+
+    return Modian_URL + '?' + apiParams.toString()
+  }
 }
 
 function actionCopy (elm) {
