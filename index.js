@@ -11,8 +11,19 @@ const storage = {
 
     data.logo_url = new_date.logo_url
 
-    // 与上个数据日期对比，同日数据覆盖
-    if (last_data && isSameDate(last_data.date, data_to_save.date)) {
+    /* 短日期数据补全 */
+    data.list.forEach(item => {
+      if (item.date.length === 5) {
+        const now = new Date()
+        item.date = `${now.getFullYear()}-${item.date}`
+      }
+    })
+
+    /* 移除脏数据 */
+    data.list = cleanDirtyData(data.list)
+
+    /* 与上个数据日期对比，同日数据覆盖 */
+    if (last_data && (last_data.date === data_to_save.date)) {
       data.list[data.list.length - 1] = data_to_save
     } else {
       data.list.push(data_to_save)
@@ -20,12 +31,16 @@ const storage = {
 
     localStorage.setItem(storage_key_name, JSON.stringify(data))
 
-    function isSameDate(date1_str, date2_str) {
-      const date1 = new Date(date1_str)
-      const date2 = new Date(date2_str)
+    function cleanDirtyData(list) {
+      return list.reduce((accumulator, item) => {
+        const exist_index = accumulator.map(item => item.date).indexOf(item.date)
 
-      return (date1.getMonth() === date2.getMonth())
-        && (date1.getDate() === date2.getDate())
+        if (exist_index > -1) {
+          accumulator.splice(exist_index, 1)
+        }
+
+        return accumulator.concat(item)
+      }, [])
     }
   },
 
@@ -88,7 +103,7 @@ function renderToTable(data) {
     data.list.forEach((item, index) => {
       const
         yesterday = data.list[index - 1],
-        avg = financeFormat(item.backer_money_rew / item.backer_count)
+        avg = financeFormat(item.backer_money_rew / item.backer_count || 0)
       let increase
 
       if (yesterday) {
@@ -111,7 +126,7 @@ function renderToTable(data) {
       }
 
       const td_list = [
-        createTD(item.date, 'center'),
+        createTD(item.date.slice(5), 'center'),
         createTD(financeFormat(item.backer_money_rew), 'right'),
         createTD(item.backer_count, 'right'),
         createTD(avg, 'right'),
@@ -149,14 +164,13 @@ function renderToTable(data) {
 }
 
 function financeFormat(value) {
-  return value.toLocaleString('en-US', {
+  return parseFloat(value).toLocaleString('en-US', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   })
 }
 
 function init() {
-
   return getProjectAPI()
     .then(url => {
       return makeRequest('GET', url)
@@ -171,7 +185,6 @@ function init() {
       renderToTable(data)
 
       return data
-
     })
     .catch(err => {
       document.querySelector('.container').remove()
@@ -183,7 +196,7 @@ function init() {
     const
       backer_money_rew = financeFormat(data.backer_money_rew),
       backer_count = data.backer_count,
-      avg = financeFormat(backer_money_rew / backer_count || 0)
+      avg = financeFormat(data.backer_money_rew / backer_count || 0)
 
     let result
 
@@ -197,13 +210,14 @@ function init() {
   function formatDate(data) {
     let
       date = new Date(),
+      YYYY = date.getFullYear(),
       MM = date.getMonth() + 1,
       DD = date.getDate()
 
     if (MM < 10) MM = '0' + MM
     if (DD < 10) DD = '0' + DD
 
-    data.date = [MM, DD].join('-')
+    data.date = [YYYY, MM, DD].join('-')
   }
 
   function getProjectAPI() {
