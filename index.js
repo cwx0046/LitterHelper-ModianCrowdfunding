@@ -81,19 +81,19 @@ function renderToTable (data) {
     data.list.forEach((item, index) => {
       const
         yesterday = data.list[index - 1],
-        avg = Math.round(item.backer_money_rew / item.backer_count)
+        avg = financeFormat(item.backer_money_rew / item.backer_count)
       let increase
 
       if (yesterday) {
         const
           backer_money_rew = item.backer_money_rew - yesterday.backer_money_rew,
           backer_count = item.backer_count - yesterday.backer_count,
-          avg = Math.round(backer_money_rew / backer_count) || 0
+          avg = backer_money_rew / backer_count || 0
 
         increase = {
-          backer_money_rew: backer_money_rew,
+          backer_money_rew: financeFormat(backer_money_rew),
           backer_count: backer_count,
-          avg: avg,
+          avg: financeFormat(avg)
         }
       } else {
         increase = {
@@ -105,7 +105,7 @@ function renderToTable (data) {
 
       const td_list = [
         createTD(item.date, 'center'),
-        createTD(item.backer_money_rew, 'right'),
+        createTD(financeFormat(item.backer_money_rew), 'right'),
         createTD(item.backer_count, 'right'),
         createTD(avg, 'right'),
         createTD(increase.backer_money_rew, 'right'),
@@ -137,6 +137,13 @@ function renderToTable (data) {
       el.innerText = text
 
       return el
+    }
+
+    function financeFormat(value) {
+      return value.toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      })
     }
   }
 }
@@ -223,4 +230,4 @@ function actionCopy (elm) {
   elm.innerText = '已复制'
 }
 
-init()
+init().then(() => {})
