@@ -23,6 +23,7 @@
       font-family: 'Open Sans', sans-serif;
       background: linear-gradient(70deg, #c2eaf1, #e6ccda, #ecc8bd);
       min-height: 100%;
+      min-width: fit-content;
   }
 
   .container {
@@ -48,6 +49,10 @@
       text-align: right;
   }
 
+  .no-wrap {
+      white-space: nowrap;
+  }
+
   .container-littleHelper {
       margin: 3rem auto 1rem;
       width: 300px;
@@ -71,17 +76,12 @@
       border-radius: 4px;
   }
 
-  .table-container {
-    margin: 25px 0;
-    overflow: auto;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-    background-color: rgba(0, 0, 0, 0.065);
-  }
-
   .styled-table {
       border-collapse: collapse;
       font-size: 0.9em;
       min-width: 400px;
+      margin: 25px 0;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
   }
 
   .styled-table thead tr th {
@@ -129,25 +129,23 @@
 
 <div class="container">
   <img src="" alt="" class="mainView">
-  <div class="table-container">
-    <table id="dataTable" class="styled-table">
-      <thead>
-      <tr>
-        <th class="text-center">日期</th>
-        <th class="text-right">金额</th>
-        <th class="text-right">人数</th>
-        <th class="text-right">人均</th>
-        <th class="text-right">日增额</th>
-        <th class="text-right">日增人</th>
-        <th class="text-right">日增人均</th>
-      </tr>
-      </thead>
-      <tbody>
+  <table id="dataTable" class="styled-table">
+    <thead>
+    <tr class="no-wrap">
+      <th class="text-center">日期</th>
+      <th class="text-right">金额</th>
+      <th class="text-right">人数</th>
+      <th class="text-right">人均</th>
+      <th class="text-right">日增额</th>
+      <th class="text-right">日增人</th>
+      <th class="text-right">日增人均</th>
+    </tr>
+    </thead>
+    <tbody>
 
-      </tbody>
-      <tfoot></tfoot>
-    </table>
-  </div>
+    </tbody>
+    <tfoot></tfoot>
+  </table>
 
   <div class="container-littleHelper">
     <div>
@@ -159,6 +157,6 @@
   </div>
 </div>
 
-<script src="./index.js?V=1.2.2"></script>
+<script src="./index.js?V=1.2.3"></script>
 </body>
 </html>

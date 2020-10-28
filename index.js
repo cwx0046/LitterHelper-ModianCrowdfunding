@@ -126,13 +126,13 @@ function renderToTable(data) {
       }
 
       const td_list = [
-        createTD(item.date.slice(5), 'center'),
-        createTD(financeFormat(item.backer_money_rew), 'right'),
-        createTD(item.backer_count, 'right'),
-        createTD(avg, 'right'),
-        createTD(increase.backer_money_rew, 'right'),
-        createTD(increase.backer_count, 'right'),
-        createTD(increase.avg, 'right')
+        createTD(item.date.slice(5), ['text-center', 'no-wrap']),
+        createTD(financeFormat(item.backer_money_rew), 'text-right'),
+        createTD(item.backer_count, 'text-right'),
+        createTD(avg, 'text-right'),
+        createTD(increase.backer_money_rew, 'text-right'),
+        createTD(increase.backer_count, 'text-right'),
+        createTD(increase.avg, 'text-right')
       ]
 
       const tr = document.createElement('tr')
@@ -152,10 +152,17 @@ function renderToTable(data) {
       document.querySelector('.mainView').src = src
     }
 
-    function createTD(text, text_align) {
+    function createTD(text, className) {
       const el = document.createElement('td')
 
-      el.setAttribute('class', 'text-' + text_align)
+      if (className) {
+        if (Array.isArray(className)) {
+          el.classList.add(...className)
+        } else {
+          el.classList.add(className)
+        }
+      }
+
       el.innerText = text
 
       return el
