@@ -1,86 +1,147 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-    <meta charset="UTF-8">
-    <title>摩典数据统计</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="NorthWind">
-    <meta name="description" content="众筹数据记录">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store">
-    <style>
-        body {
-            font-size: 13px;
-        }
+  <meta charset="UTF-8">
+  <title>摩典数据统计</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="NorthWind">
+  <meta name="description" content="众筹数据记录">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store">
+  <style>
+  /* latin */
+  @font-face {
+      font-family: 'Open Sans';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: local('Open Sans Regular'), local('OpenSans-Regular'), url(https://fonts.gstatic.com/s/opensans/v18/mem8YaGs126MiZpBA-UFVZ0bf8pkAg.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
 
-        .container {
-            max-width: 750px;
-            margin: 0 auto;
-        }
+  body {
+      font-size: 13px;
+      font-family: 'Open Sans', sans-serif;
+      background: linear-gradient(70deg, #c2eaf1, #e6ccda, #ecc8bd);
+  }
 
-        .mainView {
-            width: 100%;
-        }
+  .container {
+      max-width: 750px;
+      margin: 0 auto;
+  }
 
-        #dataTable {
-            width: 100%;
-        }
+  .mainView {
+      width: 100%;
+      border-radius: 4px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  }
 
-        .text-center {
-            text-align: center;
-        }
+  #dataTable {
+      width: 100%;
+  }
 
-        .text-right {
-            text-align: right;
-        }
+  .text-center {
+      text-align: center;
+  }
 
-        .container-littleHelper {
-            margin: 3rem auto 1rem;
-            width: 300px;
-        }
+  .text-right {
+      text-align: right;
+  }
 
-        .container-littleHelper button {
-            padding: 0.5em 1em;
-        }
+  .container-littleHelper {
+      margin: 3rem auto 1rem;
+      width: 300px;
+  }
 
-        #littleHelperText {
-            width: 100%;
-            padding: 0.5em;
-            box-sizing: content-box;
-            height: 6em;
-            margin-bottom: 1em;
-        }
-    </style>
+  .container-littleHelper button {
+      padding: 0.5em 1em;
+      font-family: inherit;
+  }
+
+  #littleHelperText {
+      font-family: inherit;
+      width: 100%;
+      padding: 0.5em;
+      box-sizing: content-box;
+      height: 6em;
+      margin-bottom: 1em;
+      border-color: #009879;
+      background-color: #FFFFFF66;
+      color: #444;
+      border-radius: 4px;
+  }
+
+  .styled-table {
+      border-collapse: collapse;
+      margin: 25px 0;
+      font-size: 0.9em;
+      min-width: 400px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .styled-table thead tr th {
+      background-color: #009879;
+      color: #ffffff;
+      position: sticky;
+      top: 0;
+  }
+
+  .styled-table thead tr th:first-child {
+      border-top-left-radius: 4px;
+  }
+
+  .styled-table thead tr th:last-child {
+      border-top-right-radius: 4px;
+  }
+
+  .styled-table th,
+  .styled-table td {
+      padding: 12px 15px;
+      background-color: #FFFFFF88;
+  }
+
+  .styled-table tbody tr {
+      border-bottom: 1px solid #dddddd;
+  }
+
+  .styled-table tbody tr:nth-of-type(even) {
+      background-color: #f3f3f3;
+  }
+
+  .styled-table tbody tr:last-of-type {
+      border-bottom: 2px solid #009879;
+  }
+  </style>
 </head>
 <body>
 
 <div class="container">
-    <img src="" alt="" class="mainView">
-    <table id="dataTable">
-        <thead>
-        <tr>
-            <th>日期</th>
-            <th class="text-right">金额</th>
-            <th class="text-right">人数</th>
-            <th class="text-right">人均</th>
-            <th class="text-right">日增额</th>
-            <th class="text-right">日增人</th>
-            <th class="text-right">日增人均</th>
-        </tr>
-        </thead>
-        <tbody>
+  <img src="" alt="" class="mainView">
+  <table id="dataTable" class="styled-table">
+    <thead>
+    <tr>
+      <th class="text-center">日期</th>
+      <th class="text-right">金额</th>
+      <th class="text-right">人数</th>
+      <th class="text-right">人均</th>
+      <th class="text-right">日增额</th>
+      <th class="text-right">日增人</th>
+      <th class="text-right">日增人均</th>
+    </tr>
+    </thead>
+    <tbody>
 
-        </tbody>
-        <tfoot></tfoot>
-    </table>
+    </tbody>
+    <tfoot></tfoot>
+  </table>
 
-    <div class="container-littleHelper">
-        <div>
-            <textarea id="littleHelperText"></textarea>
-        </div>
-        <div class="text-center">
-            <button onclick="actionCopy(this)">复制</button>
-        </div>
+  <div class="container-littleHelper">
+    <div>
+      <textarea id="littleHelperText"></textarea>
     </div>
+    <div class="text-center">
+      <button onclick="actionCopy(this)">Copy</button>
+    </div>
+  </div>
 </div>
 
 <script src="./index.js?V=1.2.1"></script>
