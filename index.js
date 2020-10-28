@@ -12,13 +12,21 @@ const storage = {
     data.logo_url = new_date.logo_url
 
     // 与上个数据日期对比，同日数据覆盖
-    if (last_data && (last_data.date === data_to_save.date)) {
+    if (last_data && isSameDate(last_data.date, data_to_save.date)) {
       data.list[data.list.length - 1] = data_to_save
     } else {
       data.list.push(data_to_save)
     }
 
     localStorage.setItem(storage_key_name, JSON.stringify(data))
+
+    function isSameDate(date1_str, date2_str) {
+      const date1 = new Date(date1_str)
+      const date2 = new Date(date2_str)
+
+      return (date1.getMonth() === date2.getMonth())
+        && (date1.getDate() === date2.getDate())
+    }
   },
 
   load() {
@@ -189,14 +197,13 @@ function init() {
   function formatDate(data) {
     let
       date = new Date(),
-      YYYY = date.getFullYear(),
       MM = date.getMonth() + 1,
       DD = date.getDate()
 
     if (MM < 10) MM = '0' + MM
     if (DD < 10) DD = '0' + DD
 
-    data.date = [YYYY, MM, DD].join('-')
+    data.date = [MM, DD].join('-')
   }
 
   function getProjectAPI() {
